@@ -46,7 +46,7 @@ juju relate netbox nrpe
 NetBox supports optionally exposing native Prometheus metrics from the application.
 See the [NetBox Prometheus][netbox-prometheus] docs for more information.
 
-```shell
+```
 juju relate netbox:target prometheus:target
 ```
 

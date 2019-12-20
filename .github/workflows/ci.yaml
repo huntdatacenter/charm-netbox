@@ -64,4 +64,4 @@ jobs:
           sudo snap install juju --classic --channel=${{ matrix.juju_channel }}
           sudo su $(whoami) -c 'juju bootstrap localhost --no-gui'
       - name: Run tests
-        run: make test-${{ test_bundles }}
+        run: make test-${{ matrix.test_bundles }}

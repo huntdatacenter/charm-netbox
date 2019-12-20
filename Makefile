@@ -74,7 +74,6 @@ generate-repo-info:
 	@echo "commit: $$(git rev-parse HEAD)" >> $(CHARM_PATH)/repo-info
 	@echo "commit-short: $$(git rev-parse --short HEAD)" >> $(CHARM_PATH)/repo-info
 	@echo "branch: $$(git rev-parse --abbrev-ref HEAD)" >> $(CHARM_PATH)/repo-info
-	@echo "remote: $$(git config --get remote.origin.url)" >> $(CHARM_PATH)/repo-info
 	@echo "generated: $$(date -u)" >> $(CHARM_PATH)/repo-info
 
 

@@ -1,0 +1,11 @@
+series: bionic
+applications:
+  netbox:
+    charm: /tmp/charm-builds/netbox
+    num_units: 1
+  postgresql:
+    charm: cs:postgresql
+    num_units: 1
+relations:
+- - netbox:db
+  - postgresql:db

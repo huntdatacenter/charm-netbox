@@ -1,0 +1,29 @@
+version: '3.4'
+services:
+  netbox:
+    container_name: netbox
+    image: netboxcommunity/netbox:{{ netbox_image_tag }}
+    env_file: {{ netbox_secrets_path }}/netbox.env
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+  netbox-worker:
+    container_name: netbox-worker
+    image: netboxcommunity/netbox:{{ netbox_image_tag }}
+    env_file: {{ netbox_secrets_path }}/netbox.env
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+  redis:
+    container_name: redis
+    env_file: {{ netbox_secrets_path }}/redis.env
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+  nginx:
+    container_name: nginx
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+    ports:
+    - 80:8080

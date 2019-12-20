@@ -1,0 +1,84 @@
+options:
+  check_docker_params:
+    type: string
+    default: "--present --status running --uptime 60:30"
+    description: |
+      The check_docker Nagios plugin parameters for the docker containers.
+      See https://github.com/timdaman/check_docker for the plugin parameters.
+  email_from:
+    type: string
+    default: "netbox@example.com"
+    description: |
+      The sender address for emails sent by NetBox.
+  email_password:
+    type: string
+    default: ""
+    description: |
+      The email password with which to authenticate.
+  email_port:
+    type: int
+    default: 25
+    description: |
+      The email server port.
+  email_server:
+    type: string
+    default: "localhost"
+    description: |
+      The host name or IP address of the email server.
+  email_username:
+    type: string
+    default: ""
+    description: |
+      The email username with which to authenticate.
+  enforce_global_unique:
+    type: boolean
+    default: false
+    description: |
+      Enforcement of unique IP space can be toggled on a per-VRF basis.
+      To enforce unique IP space within the global table (all prefixes and IP addresses not assigned to a VRF), set to True.
+  login_required:
+    type: boolean
+    default: false
+    description: |
+      Setting this to True will permit only authenticated users to access any part of NetBox.
+      By default, anonymous users are permitted to access most data in NetBox (excluding secrets) but not make any changes.
+  maintenance_mode:
+    type: boolean
+    default: false
+    description: |
+      Setting this to True will display a "maintenance mode" banner at the top of every page.
+  metrics_enabled:
+    type: boolean
+    default: true
+    description: |
+      Toggle exposing Prometheus metrics at /metrics.
+      See the https://netbox.readthedocs.io/en/stable/additional-features/prometheus-metrics/ for more details.
+  netbox_docker_repo:
+    type: string
+    default: "https://github.com/netbox-community/netbox-docker.git"
+    description: |
+      The URL of the netbox-docker repository.
+  netbox_docker_repo_version:
+    type: string
+    default: "0.19.4"
+    description: |
+      The version of netbox-docker repository.
+      See https://github.com/netbox-community/netbox-docker/tags for other versions.
+  netbox_image_tag:
+    type: string
+    default: "v2.6.9"
+    description: |
+      The version tag of netbox docker image.
+      See https://hub.docker.com/r/netboxcommunity/netbox for different tags.
+  prefer_ipv4:
+    type: boolean
+    default: false
+    description: |
+      When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default.
+      Set this to True to prefer IPv4 instead.
+  time_zone:
+    type: string
+    default: "UTC"
+    description: |
+      The time zone NetBox will use when dealing with dates and times.
+      It is recommended to use UTC time unless you have a specific need to use a local time zone.

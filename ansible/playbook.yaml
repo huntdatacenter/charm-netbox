@@ -1,0 +1,85 @@
+- hosts: localhost
+  vars:
+    netbox_path: /opt/netbox-docker
+    netbox_src_path: "{{ netbox_path }}/src"
+    netbox_checks_path: "{{ netbox_path }}/checks"
+    netbox_secrets_path: "{{ netbox_path }}/secrets"
+    netbox_superuser_name: admin
+    netbox_superuser_email: admin@example.com
+    check_docker_name: check_docker
+    check_docker_url: https://raw.githubusercontent.com/timdaman/check_docker/master/check_docker/check_docker.py
+  tasks:
+    - name: Install docker
+      apt:
+        name: "docker.io"
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+
+    - name: Create NetBox directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ netbox_path }}"
+        - "{{ netbox_src_path }}"
+        - "{{ netbox_checks_path }}"
+        - "{{ netbox_secrets_path }}"
+
+    - name: Download "{{ check_docker_name }}" plugin
+      get_url:
+        url: "{{ check_docker_url }}"
+        dest: "{{ netbox_checks_path }}/{{ check_docker_name }}"
+
+    - name: Add nagios user to docker group for "{{ check_docker_name }}"
+      user:
+        name: nagios
+        groups: docker
+        append: yes
+
+    - name: Checkout version "{{ netbox_docker_repo_version }}" from "{{ netbox_docker_repo }}"
+      git:
+        repo: "{{ netbox_docker_repo }}"
+        dest: "{{ netbox_src_path }}"
+        version: "{{ netbox_docker_repo_version }}"
+        force: yes
+
+    - name: Template docker-compose.override.yml
+      template:
+        src: templates/docker-compose.override.yml.j2
+        dest: "{{ netbox_src_path }}/docker-compose.override.yml"
+
+    - name: Template netbox.env
+      template:
+        src: templates/netbox.env.j2
+        dest: "{{ netbox_secrets_path }}/netbox.env"
+        mode: "0600"
+
+    - name: Template redis.env
+      template:
+        src: templates/redis.env.j2
+        dest: "{{ netbox_secrets_path }}/redis.env"
+        mode: "0600"
+
+    - name: Run docker-compose from "{{ netbox_src_path }}"
+      docker_compose:
+        project_src: "{{ netbox_src_path }}"
+        # Disable postgres, use external db instead
+        scale:
+          postgres: 0
+      register: compose_output
+
+    - name: Wait for NetBox to come up
+      uri:
+        url: http://localhost:80/
+        method: GET
+      register: result
+      until: result.status == 200
+      retries: 60
+      delay: 3
+
+    - name: Set running NetBox image version
+      command: "application-version-set {{ version }}"
+      vars:
+        version: "{{ (compose_output.services.netbox | json_query('*.image | [0]') | basename).split(':') | last }}"

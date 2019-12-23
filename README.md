@@ -8,7 +8,7 @@ It is based on the upstream [netbox-docker][netbox-docker-github] project, but u
 This charm requires a relation to a PostgreSQL database, for example [postgresql][postgresql-charm] charm:
 
 ```
-juju deploy ~huntdatacenter/netbox
+juju deploy cs:~huntdatacenter/netbox
 juju deploy postgresql
 juju add-relation netbox:db postgresql:db
 ```

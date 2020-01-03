@@ -1,5 +1,8 @@
 # NetBox
 
+![GitHub Action CI badge](https://github.com/huntdatacenter/charm-netbox/workflows/ci/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This charm deploys [NetBox][netbox-docs] and its required components Redis and Nginx in Docker containers.
 It is based on the upstream [netbox-docker][netbox-docker-github] project, but uses an external persistent database.
 

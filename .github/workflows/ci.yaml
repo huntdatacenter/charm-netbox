@@ -37,9 +37,9 @@ jobs:
       fail-fast: false
       matrix:
         juju_channel:
-          - 2.4/stable
           - 2.5/stable
           - 2.6/stable
+          - 2.7/stable
         test_bundles:
           - bionic-base
           - bionic-nrpe
@@ -55,11 +55,16 @@ jobs:
         with:
           name: charm
           path: /tmp/charm-builds/netbox
+      # Workarounds for https://github.com/actions/upload-artifact/issues/38
+      - run: chmod +x -R /tmp/charm-builds/netbox/bin
+      - run: find /tmp/charm-builds/netbox/hooks -maxdepth 1 -type f -exec chmod +x \{\} \;
+      # security.privileged true is required for Docker in LXD in testing
       - name: Set up LXD
         run: |
           sudo usermod --append --groups lxd $(whoami)
           sudo su $(whoami) -c 'lxd init --auto'
           sudo su $(whoami) -c 'lxc network set lxdbr0 ipv6.address none'
+          sudo su $(whoami) -c 'lxc profile set default security.privileged true'
       - name: Change ownership of root workaround for snapcraft
         # See https://forum.snapcraft.io/t/permissions-problem-using-snapcraft-in-azure-pipelines/13258/14?u=szeestraten
         run: sudo chown root:root /
@@ -69,3 +74,6 @@ jobs:
           sudo su $(whoami) -c 'juju bootstrap localhost --no-gui'
       - name: Run tests
         run: make test-${{ matrix.test_bundles }}
+      - name: Display juju debug log on failure
+        run: juju debug-log --lines 100
+        if: failure()

@@ -60,7 +60,7 @@ options:
       The URL of the netbox-docker repository.
   netbox_docker_repo_version:
     type: string
-    default: "0.21.0"
+    default: "0.21.1"
     description: |
       The version of netbox-docker repository.
       See https://github.com/netbox-community/netbox-docker/tags for other versions.

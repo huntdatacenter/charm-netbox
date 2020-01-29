@@ -46,7 +46,8 @@ juju relate netbox nrpe
 
 ## Metrics
 
-NetBox supports optionally exposing native Prometheus metrics from the application.
+NetBox supports exposing native Prometheus metrics from the application out of the box.
+This endpoint can be disabled by setting the `metrics_enabled` configuration option to false.
 See the [NetBox Prometheus][netbox-prometheus] docs for more information.
 
 ```

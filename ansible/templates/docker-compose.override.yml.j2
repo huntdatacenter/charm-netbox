@@ -20,6 +20,12 @@ services:
     deploy:
       restart_policy:
         condition: unless-stopped
+  redis-cache:
+    container_name: redis-cache
+    env_file: {{ netbox_secrets_path }}/redis-cache.env
+    deploy:
+      restart_policy:
+        condition: unless-stopped
   nginx:
     container_name: nginx
     deploy:

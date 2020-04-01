@@ -62,6 +62,12 @@
         dest: "{{ netbox_secrets_path }}/redis.env"
         mode: "0600"
 
+    - name: Template redis-cache.env
+      template:
+        src: templates/redis-cache.env.j2
+        dest: "{{ netbox_secrets_path }}/redis-cache.env"
+        mode: "0600"
+
     - name: Run docker-compose from "{{ netbox_src_path }}"
       docker_compose:
         project_src: "{{ netbox_src_path }}"

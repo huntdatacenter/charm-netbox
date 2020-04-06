@@ -67,9 +67,6 @@ jobs:
           sudo su $(whoami) -c 'lxd init --auto'
           sudo su $(whoami) -c 'lxc network set lxdbr0 ipv6.address none'
           sudo su $(whoami) -c 'lxc profile set default security.privileged true'
-      - name: Change ownership of root workaround for snapcraft
-        # See https://forum.snapcraft.io/t/permissions-problem-using-snapcraft-in-azure-pipelines/13258/14?u=szeestraten
-        run: sudo chown root:root /
       - name: Set up juju
         run: |
           sudo snap install juju --classic --channel=${{ matrix.juju_channel }}
